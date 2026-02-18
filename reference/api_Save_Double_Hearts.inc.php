@@ -17,6 +17,8 @@ header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Headers: x-requested-with, X-PINGOTHER, Content-Type, origin, Authorization, accept, client-security-token');
 $php_obj = new stdClass;
 $php_obj->success = false;
+$php_obj->notes = "";
+$php_obj->black_heart = false;
 
 try {
     // Add check for authorization header
@@ -34,10 +36,11 @@ try {
         throw new Exception("Invalid authorization header",__LINE__);
     }
     $authorization_token = $authorization_array[1];
-    $C_token_row = $this->getOneRowSQL("SELECT * FROM C_token
+    $sql_1 = "SELECT * FROM C_token
         WHERE item_name = '" . $this->real_escape_string($authorization_token) . "' 
         AND item_active=1
-        ");
+        ";
+    $C_token_row = $this->getOneRowSQL($sql_1);
     if(!$C_token_row) {
         throw new Exception("Invalid authorization token",__LINE__);
     }
@@ -89,7 +92,7 @@ try {
         $sql = "UPDATE C_Double_Heart
             SET custom_notes = '" . $this->real_escape_string($notes) . "'
             ,url = '" . $this->real_escape_string($url) . "'
-            ,Black_Heart_yn = '" . $black_heart_yn . "'
+            ,Black_Heart_yn = '" . $this->real_escape_string($black_heart_yn) . "'
             WHERE item_id = '" . (int)$existing_row['item_id'] . "'";
         $item_id = $existing_row['item_id'];
         $this->log_message("sql: " . $sql);
@@ -104,7 +107,7 @@ try {
             , custom_notes = '" . $this->real_escape_string($notes) . "'
             ,url = '" . $this->real_escape_string($url) . "'
             ,KD_user_item_id = '" . (int)$user_row['item_id'] . "'
-            ,Black_Heart_yn = '" . $black_heart_yn . "'
+            ,Black_Heart_yn = '" . $this->real_escape_string($black_heart_yn) . "'
             " . $this->usual_fields('C_Double_Heart');
 
         $this->log_message("sql: " . $sql);
