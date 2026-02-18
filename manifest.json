@@ -1,0 +1,18 @@
+{
+    "manifest_version": 3,
+    "name": "Zillow Double Heart",
+    "version": "1.0",
+    "description": "Heart Zillow properties and add notes via DoubleHeart.sidebar.org",
+    "permissions": ["scripting", "storage"],
+    "host_permissions": [
+      "https://www.zillow.com/*",
+      "https://doubleheart.sidebar.org/*"
+    ],
+    "content_scripts": [
+      {
+        "matches": ["https://www.zillow.com/*"],
+        "js": ["content.js"]
+      }
+    ]
+  }
+  
