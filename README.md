@@ -7,8 +7,8 @@ A Chrome extension that lets you heart Zillow property listings and attach perso
 While browsing Zillow property detail pages, a heart icon appears in the top-right corner of the browser window:
 
 - **🤍** — property not yet hearted
-- **❤️** — hearted
-- **🖤** — hearted with black heart status
+- **❤️** — Double Heart: notes exist for this property
+- **🖤** — Black Heart: ignore this property
 
 Clicking the icon opens a form to add or edit notes for that property. Hearts and notes are saved to the DoubleHeart backend and associated with your account.
 
