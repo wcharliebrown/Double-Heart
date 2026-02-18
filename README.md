@@ -2,6 +2,10 @@
 
 A Chrome extension that lets you heart Zillow property listings and attach personal notes, synced to your account on [doubleheart.sidebar.org](https://doubleheart.sidebar.org).
 
+## Motivation
+
+Zillow is great! But it doesn't have the ability to add notes or mark a property as 'love' versus 'like' — so DoubleHeart fills that gap.
+
 ## What it does
 
 While browsing Zillow property detail pages, a heart icon appears in the top-right corner of the browser window:
