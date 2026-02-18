@@ -51,6 +51,10 @@ Clicking the icon opens a form to add or edit notes for that property. Hearts an
 | `reference/api_Save_Double_Hearts.inc.php` | Backend API reference (not part of the extension) |
 | `reference/schema.txt` | Database schema for the backend (not part of the extension) |
 
+## Security
+
+Don't trust browser plugins!! Examine the files yourself. These files are tiny and easy to read. For the truly paranoid, I have included some of the code that runs the DoubleHeart server side so you can implement your own private back-end.
+
 ## Permissions
 
 - `scripting` — inject the content script
