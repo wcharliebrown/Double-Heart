@@ -4,6 +4,7 @@ console.log("✅ Zillow Double Heart: content script loaded");
 let currentPropertyId = null;
 let currentHeartData = { hearted: false, notes: "", black_heart: false };
 let authToken = null;
+let isLoading = false;
 
 // Entry point
 (async function init() {
@@ -21,6 +22,9 @@ let authToken = null;
 
 // ✅ Main loader for the current page
 async function loadForCurrentPage() {
+  if (isLoading) return;
+  isLoading = true;
+  try {
   const propertyId = getZillowPropertyId();
 
   // Not on a property page => remove heart if it exists
@@ -48,6 +52,9 @@ async function loadForCurrentPage() {
     };
 
     injectHeartIcon(propertyId, currentHeartData);
+  }
+  } finally {
+    isLoading = false;
   }
 }
 
@@ -285,8 +292,8 @@ function showLoginForm() {
       submitBtn.click();
     }
   };
-  usernameInput.addEventListener("keypress", handleEnter);
-  passwordInput.addEventListener("keypress", handleEnter);
+  usernameInput.addEventListener("keydown", handleEnter);
+  passwordInput.addEventListener("keydown", handleEnter);
 
   submitBtn.onclick = async () => {
     const username = usernameInput.value.trim();
@@ -403,7 +410,14 @@ function openHeartForm(propertyId) {
       <h3>❤️ Property ${propertyId}</h3>
       <textarea id="double-heart-notes"
         style="width:100%;height:80px;"
-      >${currentHeartData.notes || ""}</textarea>
+      ></textarea>
+
+      <div style="margin-top:8px;">
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+          <input type="checkbox" id="double-heart-black">
+          🖤 Black Heart (ignore this property)
+        </label>
+      </div>
 
       <div style="margin-top:10px;display:flex;gap:8px;justify-content:flex-end;">
         <button id="save-heart">Save</button>
@@ -423,28 +437,29 @@ function openHeartForm(propertyId) {
 
   document.body.appendChild(modal);
 
+  // Set values after DOM insertion to avoid XSS via innerHTML interpolation
+  modal.querySelector("#double-heart-notes").value = currentHeartData.notes || "";
+  modal.querySelector("#double-heart-black").checked = currentHeartData.black_heart;
+
   modal.querySelector("#close-heart").onclick = () => modal.remove();
 
   modal.querySelector("#save-heart").onclick = async () => {
     const notes = modal.querySelector("#double-heart-notes").value;
-    await saveHeart(propertyId, notes);
+    const black_heart = modal.querySelector("#double-heart-black").checked;
+    await saveHeart(propertyId, notes, black_heart);
 
-    // Update global state and icon (preserve black_heart status)
-    currentHeartData = {
-      hearted: true,
-      notes,
-      black_heart: currentHeartData.black_heart
-    };
+    // Update global state and icon
+    currentHeartData = { hearted: true, notes, black_heart };
 
     const heart = document.getElementById("double-heart-icon");
-    if (heart) heart.innerHTML = currentHeartData.black_heart ? "🖤" : "❤️";
+    if (heart) heart.innerHTML = black_heart ? "🖤" : "❤️";
 
     modal.remove();
   };
 }
 
 // ✅ Save to your API
-async function saveHeart(propertyId, notes) {
+async function saveHeart(propertyId, notes, black_heart) {
   if (!authToken) {
     console.warn("⚠️ No auth token, cannot save heart");
     showLoginForm();
@@ -462,6 +477,7 @@ async function saveHeart(propertyId, notes) {
         propertyId,
         hearted: true,
         notes,
+        black_heart,
         url: location.href
       })
     });

@@ -1,7 +1,7 @@
 <?php
 /**
  * 
- * This script will run whenever the page api-Get-Double-Hearts is accessed.
+ * This script will run whenever the page api-Save-Double-Hearts is accessed.
  *
  * To modify the page fields use $this->db_page_row like this:
  * $this->db_page_row['body'] .= " Hey this is in the body field now!<br />";
@@ -62,7 +62,8 @@ try {
         throw new Exception("Invalid propertyId",__LINE__);
     }
     $notes = $_POST['notes'];
-    $url =  $_POST['url'];
+    $url = $_POST['url'];
+    $black_heart_yn = !empty($_POST['black_heart']) ? 'Y' : 'N';
     $sql_1 = "SELECT C_Double_Heart.*
         FROM C_Double_Heart
 
@@ -87,7 +88,8 @@ try {
     if($existing_row) {
         $sql = "UPDATE C_Double_Heart
             SET custom_notes = '" . $this->real_escape_string($notes) . "'
-            ,url = '" . $this->real_escape_string($url) . "' 
+            ,url = '" . $this->real_escape_string($url) . "'
+            ,Black_Heart_yn = '" . $black_heart_yn . "'
             WHERE item_id = '" . (int)$existing_row['item_id'] . "'";
         $item_id = $existing_row['item_id'];
         $this->log_message("sql: " . $sql);
@@ -99,9 +101,10 @@ try {
     } else {
         $sql = "INSERT INTO C_Double_Heart
             SET item_name = '" . (int)$propertyId . "'
-            , custom_notes = '" . $this->real_escape_string($notes) . "' 
-            ,url = '" . $this->real_escape_string($url) . "' 
+            , custom_notes = '" . $this->real_escape_string($notes) . "'
+            ,url = '" . $this->real_escape_string($url) . "'
             ,KD_user_item_id = '" . (int)$user_row['item_id'] . "'
+            ,Black_Heart_yn = '" . $black_heart_yn . "'
             " . $this->usual_fields('C_Double_Heart');
 
         $this->log_message("sql: " . $sql);
