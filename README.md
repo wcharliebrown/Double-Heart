@@ -14,7 +14,13 @@ While browsing Zillow property detail pages, a heart icon appears in the top-rig
 - **❤️** — Double Heart: notes exist for this property
 - **🖤** — Black Heart: ignore this property
 
-Clicking the icon opens a form to add or edit notes for that property. Hearts and notes are saved to the DoubleHeart backend and associated with your account.
+Clicking the icon opens a form to add or edit notes for that property. Hearts and notes are saved to the DoubleHeart backend and associated with your account. Your hearted property lists can also be shared with friends and family.
+
+## Requirements
+
+- Chrome or a Chromium-based browser (Edge, Brave, etc.)
+- JavaScript enabled in browser settings
+- A free account at [doubleheart.sidebar.org](https://doubleheart.sidebar.org) — sign up via email verification
 
 ## How it works
 
